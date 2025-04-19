@@ -35,7 +35,8 @@ void FillCircle(SDL_Surface* surface, struct Circle circle, Uint32 color)
 int main()
 {
 	SDL_Init(SDL_INIT_VIDEO);
-	SDL_Window* window = SDL_CreateWindow("Raytracing", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
+	SDL_Window* window = SDL_CreateWindow("Raytracing", SDL_WINDOWPOS_CENTERED,
+										  SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
 	
 	SDL_Surface* surface = SDL_GetWindowSurface(window);
 	//SDL_Rect rect = (SDL_Rect){ 200, 200, 200, 200 };
@@ -43,6 +44,7 @@ int main()
 	/*SDL_UpdateWindowSurface(window);*/
 
 	struct Circle circle = { 200, 200, 80 };
+	struct Circle shadow_circle = { 650, 300, 140 };
 	SDL_Rect erase_rect = (SDL_Rect) { 0, 0, WIDTH, HEIGHT };
 
 	int simulation_running = 1;
@@ -66,6 +68,8 @@ int main()
 
 		SDL_FillRect(surface, &erase_rect, COLOR_BLACK);
 		FillCircle(surface, circle, COLOR_WHITE);
+
+		FillCircle(surface, shadow_circle, COLOR_WHITE);
 
 		SDL_UpdateWindowSurface(window);
 		SDL_Delay(10);
