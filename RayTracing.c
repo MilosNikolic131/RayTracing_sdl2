@@ -2,16 +2,25 @@
 #include <SDL.h>
 #include <math.h>
 
-#define WIDTH 900
-#define HEIGHT 600
-#define COLOR_WHITE 0xffffffff
-#define COLOR_BLACK 0x00000000
+#define WIDTH		900
+#define HEIGHT		600
+#define COLOR_WHITE	0xffffffff
+#define COLOR_BLACK	0x00000000
+#define COLOR_GRAY	0xefefefefef
+#define RAYS_NUMBER 100
 
 struct Circle
 {
 	double x;
 	double y;
 	double radius;
+};
+
+struct Ray
+{
+	double x_start, y_start;
+	double angle;
+	double x_end, y_end;
 };
 
 void FillCircle(SDL_Surface* surface, struct Circle circle, Uint32 color)
@@ -32,6 +41,22 @@ void FillCircle(SDL_Surface* surface, struct Circle circle, Uint32 color)
 	}
 }
 
+void generate_rays(struct Circle circle, struct Ray rays[RAYS_NUMBER])
+{
+	for (int i = 0; i < RAYS_NUMBER; i++)
+	{
+		double angle = ((double) i / RAYS_NUMBER) * 2 * M_PI;
+		struct Ray ray = { circle.x, circle.y, angle};
+		rays[i] = ray;
+		printf("angle :%f\n", angle);
+	}
+}
+
+void FillRays(SDL_Surface* surface, struct Ray rays[RAYS_NUMBER], Uint32 color)
+{
+
+}
+
 int main()
 {
 	SDL_Init(SDL_INIT_VIDEO);
@@ -49,6 +74,9 @@ int main()
 
 	int simulation_running = 1;
 	SDL_Event event;
+	
+	struct Ray rays[RAYS_NUMBER];
+	generate_rays(circle, rays);
 
 	while (simulation_running)
 	{
@@ -63,6 +91,7 @@ int main()
 			{
 				circle.x = event.motion.x;
 				circle.y = event.motion.y;
+				generate_rays(circle, rays);
 			}
 		}
 
@@ -70,6 +99,7 @@ int main()
 		FillCircle(surface, circle, COLOR_WHITE);
 
 		FillCircle(surface, shadow_circle, COLOR_WHITE);
+		FillRays(surface, rays, COLOR_GRAY); 
 
 		SDL_UpdateWindowSurface(window);
 		SDL_Delay(10);
